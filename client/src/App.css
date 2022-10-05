@@ -210,7 +210,7 @@ input {
 
 .modal-header,
 .modal-footer {
-  background: var(--lightgray);
+  background: lightgray;
 }
 
 .modal-header {
@@ -238,11 +238,11 @@ input {
   font-size: 24pt;
 }
 
-#close-modal-button {
+.close-modal-button {
   float:right;
 }
 
-#confirm-cancel-container {
+.confirm-cancel-container {
   text-align:center;
 }
 

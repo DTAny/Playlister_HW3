@@ -50,6 +50,11 @@ function ListCard(props) {
         setText(event.target.value );
     }
 
+    function handleShowDeleteListModal(event) {
+        event.stopPropagation();
+        store.showDeleteListModal(idNamePair);
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -74,6 +79,7 @@ function ListCard(props) {
                 disabled={cardStatus}
                 type="button"
                 id={"delete-list-" + idNamePair._id}
+                onClick={handleShowDeleteListModal}
                 className="list-card-button"
                 value={"\u2715"}
             />
