@@ -1,7 +1,8 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api'
-import AddSong_Transaction from '../transactions/AddSong_Transaction.js'
+import AddSong_Transaction from '../transactions/AddSong_Transaction'
+import MoveItem_Transaction from '../transactions/MoveItem_Transaction'
 
 export const GlobalStoreContext = createContext({});
 /*
@@ -261,6 +262,42 @@ export const useGlobalStore = () => {
             }
         }
         asyncAddSong();
+    }
+
+    store.addMoveItemTransaction = function (start, end) {
+        let transaction = new MoveItem_Transaction(store, start, end);
+        tps.addTransaction(transaction);
+    }
+
+    store.moveItem = function (start, end) {
+        if (start < end) {
+            let temp = store.currentList.songs[start];
+            for (let i = start; i < end; i++) {
+                store.currentList.songs[i] = store.currentList.songs[i + 1];
+            }
+            store.currentList.songs[end] = temp;
+        }
+        else if (start > end) {
+            let temp = store.currentList.songs[start];
+            for (let i = start; i > end; i--) {
+                store.currentList.songs[i] = store.currentList.songs[i - 1];
+            }
+            store.currentList.songs[end] = temp;
+        }
+        store.updateCurrentList();
+    }
+
+    store.updateCurrentList = function() {
+        async function asyncUpdateCurrentList() {
+            const response = await api.updateListByid(store.currentList._id, store.currentList);
+            if (response.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: store.currentList
+                });
+            }
+        }
+        asyncUpdateCurrentList();
     }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
