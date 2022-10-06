@@ -4,6 +4,7 @@ import { GlobalStoreContext } from '../store'
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [draggedTo, setDraggedTo] = useState(false);
+    const { song, index } = props;
 
     function handleDragStart(event) {
         event.dataTransfer.setData("id", event.target.id);
@@ -33,7 +34,11 @@ function SongCard(props) {
         store.addMoveItemTransaction(parseInt(sourceId), parseInt(targetId));
     }
 
-    const { song, index } = props;
+    function handleRemoveSong(event) {
+        event.preventDefault();
+        store.showRemoveSongModal(index);
+    }
+
     let cardClass = "list-card unselected-list-card";
     if (draggedTo) {
         cardClass = "list-card selected-list-card";
@@ -61,6 +66,7 @@ function SongCard(props) {
                 type="button"
                 id={"remove-song-" + index}
                 className="list-card-button"
+                onClick={handleRemoveSong}
                 value={"\u2715"}
             />
         </div>

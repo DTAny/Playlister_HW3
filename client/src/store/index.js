@@ -3,6 +3,7 @@ import jsTPS from '../common/jsTPS'
 import api from '../api'
 import AddSong_Transaction from '../transactions/AddSong_Transaction'
 import MoveItem_Transaction from '../transactions/MoveItem_Transaction'
+import RmSong_Transaction from '../transactions/RmSong_Transaction'
 
 export const GlobalStoreContext = createContext({});
 /*
@@ -21,6 +22,7 @@ export const GlobalStoreActionType = {
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
+    MARK_SONG_FOR_REMOVAL: "MARK_SONG_FOR_REMOVAL",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -104,6 +106,15 @@ export const useGlobalStore = () => {
                     currentList: payload,
                     newListCounter: store.newListCounter,
                     listNameActive: true
+                });
+            }
+            case GlobalStoreActionType.MARK_SONG_FOR_REMOVAL: {
+                return setStore({
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    songMarkedForRemoval: payload
                 });
             }
             default:
@@ -299,6 +310,42 @@ export const useGlobalStore = () => {
             }
         }
         asyncUpdateCurrentList();
+    }
+
+    store.removeMarkedSong = () => {
+        store.addRemoveSongTransaction(store.songMarkedForRemoval, store.currentList.songs[store.songMarkedForRemoval]);
+    }
+
+    store.addRemoveSongTransaction = (index, song) => {
+        let transaction = new RmSong_Transaction(store, index, song);
+        tps.addTransaction(transaction);
+    }
+
+    store.removeSong = (index) => {
+        async function asyncRemoveSong() {
+            store.currentList.songs.splice(index, 1);
+            store.updateCurrentList();
+        }
+        asyncRemoveSong();
+    }
+
+    store.showRemoveSongModal = (index) => {
+        let modal = document.getElementById('remove-modal');
+        storeReducer({type: GlobalStoreActionType.MARK_SONG_FOR_REMOVAL, payload: index})
+        modal.classList.add('is-visible');
+    }
+
+    store.hideRemoveSongModal = () => {
+        let modal = document.getElementById('remove-modal');
+        modal.classList.remove('is-visible');
+    }
+
+    store.insertSong = (index, song) => {
+        async function asyncInsertSong() {
+            store.currentList.songs.splice(index, 0, song);
+            store.updateCurrentList();
+        }
+        asyncInsertSong();
     }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
