@@ -12,6 +12,7 @@ function EditToolbar() {
     const history = useHistory();
 
     let enabledButtonClass = "playlister-button";
+    let disableButtonClass = "playlister-button-disabled"
 
     function handleUndo() {
         store.undo();
@@ -23,42 +24,45 @@ function EditToolbar() {
         history.push("/");
         store.closeCurrentList();
     }
-    let editStatus = false;
-    if (store.isListNameEditActive) {
-        editStatus = true;
+    let addStatus = false, undoStatus = !store.hasUndo, redoStatus = !store.hasRedo, closeStatus = false;
+    if (store.currentList === null || store.buttonDisabled) {
+        addStatus = true;
+        undoStatus = true;
+        redoStatus = true;
+        closeStatus = true;
     }
     return (
         <div id="edit-toolbar">
             <input
                 type="button"
                 id='add-song-button'
-                disabled={editStatus}
+                disabled={addStatus}
                 value="+"
-                className={enabledButtonClass}
+                className={addStatus ? disableButtonClass : enabledButtonClass}
                 onClick={store.addSongTrasaction}
             />
             <input
                 type="button"
                 id='undo-button'
-                disabled={editStatus}
+                disabled={undoStatus}
                 value="⟲"
-                className={enabledButtonClass}
+                className={undoStatus ? disableButtonClass : enabledButtonClass}
                 onClick={handleUndo}
             />
             <input
                 type="button"
                 id='redo-button'
-                disabled={editStatus}
+                disabled={redoStatus}
                 value="⟳"
-                className={enabledButtonClass}
+                className={redoStatus ? disableButtonClass : enabledButtonClass}
                 onClick={handleRedo}
             />
             <input
                 type="button"
                 id='close-button'
-                disabled={editStatus}
+                disabled={closeStatus}
                 value="&#x2715;"
-                className={enabledButtonClass}
+                className={closeStatus ? disableButtonClass : enabledButtonClass}
                 onClick={handleClose}
             />
         </div>);

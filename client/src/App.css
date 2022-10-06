@@ -113,6 +113,11 @@ body {
   cursor: not-allowed;
 }
 
+.playlister-button-disabled:hover {
+  opacity: 0.25; 
+  cursor: not-allowed;
+}
+
 #playlister-statusbar {
   position: absolute;
   left: 0%;
@@ -132,10 +137,15 @@ body {
   background-color: var(--swatch-primary);
 }
 
-#add-list-button:hover {
+.playlister-button#add-list-button:hover {
   cursor: pointer;
   color:black;
   background-color: #999999;
+}
+
+.playlister-button-disabled#add-list-button:hover {
+  opacity: 0.25; 
+  cursor: not-allowed;
 }
 
 .list-card, .selected-list-card, .unselected-list-card {
@@ -183,6 +193,7 @@ input {
 
 .disabled {
   background-color: lightgray;
+  cursor: not-allowed;
 }
 
 .disabled:hover {

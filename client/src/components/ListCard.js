@@ -60,10 +60,7 @@ function ListCard(props) {
     if (selected) {
         selectClass = "selected-list-card";
     }
-    let cardStatus = false;
-    if (store.isListNameEditActive) {
-        cardStatus = true;
-    }
+    let cardStatus = store.buttonDisabled;
     let cardElement =
         <div
             id={idNamePair._id}
