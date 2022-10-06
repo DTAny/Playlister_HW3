@@ -4,6 +4,7 @@ import api from '../api'
 import AddSong_Transaction from '../transactions/AddSong_Transaction'
 import MoveItem_Transaction from '../transactions/MoveItem_Transaction'
 import RmSong_Transaction from '../transactions/RmSong_Transaction'
+import EditSong_Transaction from '../transactions/EditSong_Transaction'
 
 export const GlobalStoreContext = createContext({});
 /*
@@ -23,6 +24,7 @@ export const GlobalStoreActionType = {
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     MARK_SONG_FOR_REMOVAL: "MARK_SONG_FOR_REMOVAL",
+    MARK_SONG_FOR_EDIT: "MARK_SONG_FOR_EDIT",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -115,6 +117,15 @@ export const useGlobalStore = () => {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     songMarkedForRemoval: payload
+                });
+            }
+            case GlobalStoreActionType.MARK_SONG_FOR_EDIT: {
+                return setStore({
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    songMarkedForEdit: payload
                 });
             }
             default:
@@ -346,6 +357,29 @@ export const useGlobalStore = () => {
             store.updateCurrentList();
         }
         asyncInsertSong();
+    }
+
+    store.showEditSongModal = (index) => {
+        let modal = document.getElementById('edit-modal');
+        storeReducer({type: GlobalStoreActionType.MARK_SONG_FOR_EDIT, payload: index})
+        modal.classList.add('is-visible');
+    }
+
+    store.hideEditSongModal = () => {
+        let modal = document.getElementById('edit-modal');
+        modal.classList.remove('is-visible');
+    }
+
+    store.editMarkedSong = (newSong) => {
+        let index = store.songMarkedForEdit;
+        let oldSong = store.currentList.songs[index];
+        let t = new EditSong_Transaction(store, index, newSong, oldSong);
+        tps.addTransaction(t);
+    }
+
+    store.editSong = (index, newSong) => {
+        store.currentList.songs[index] = newSong;
+        store.updateCurrentList();
     }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT

@@ -4,7 +4,7 @@ import { GlobalStoreContext } from '../store'
 function RemoveModal() {
     const { store } = useContext(GlobalStoreContext);
     let title = "";
-    if (store.songMarkedForRemoval != undefined){
+    if (store.songMarkedForRemoval !== undefined){
         title = store.currentList.songs[store.songMarkedForRemoval].title;
     }
     function handleRemoveList(event) {

@@ -184,6 +184,14 @@ input {
   color: var(--swatch-neutral);
 }
 
+.modal-input {
+  font-size: 17pt;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  justify-content: center;
+  align-items: center;
+}
+
 /* THIS STYLE SHEET MANAGES STYLE FOR OUR MODAL, i.e. DIALOG BOX */
 
 .modal {
