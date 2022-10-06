@@ -28,7 +28,7 @@ function EditToolbar() {
         editStatus = true;
     }
     return (
-        <span id="edit-toolbar">
+        <div id="edit-toolbar">
             <input
                 type="button"
                 id='add-song-button'
@@ -61,7 +61,7 @@ function EditToolbar() {
                 className={enabledButtonClass}
                 onClick={handleClose}
             />
-        </span>);
+        </div>);
 }
 
 export default EditToolbar;
