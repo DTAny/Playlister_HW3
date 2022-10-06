@@ -60,6 +60,7 @@ body {
   grid-row: 1 / 2;
   background-color: transparent;
   float:right;
+  display: flex;
 }
 
 #playlist-selector, #playlist-cards {
@@ -73,6 +74,8 @@ body {
 #playlist-selector-heading {
   font-size: 40pt;
   border-bottom:var(--swatch-accent) dotted 2pt;
+  display: flex;
+  justify-content: center;
 }
 
 .playlister-button, .playlister-button-disabled {
@@ -81,12 +84,15 @@ body {
   float:left;
   color: black;
   cursor: pointer;
-  opacity: 100%;
+  opacity: 80%;
+  border-radius: 10pt;
+  border: #999999 1pt solid;
 }
 
 .playlister-button:hover {
   cursor: pointer;
   color:black;
+  background-color:#cccccc;
 }
 
 .playlister-button-disabled {
@@ -111,12 +117,11 @@ body {
   float:left;
   margin: 1pt 1rem;
   background-color: var(--swatch-primary);
-  border-radius: 5pt;
-  border: #999999 1pt solid;
 }
 
 #add-list-button:hover {
   cursor: pointer;
+  color:black;
   background-color: #999999;
 }
 
