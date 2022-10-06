@@ -142,10 +142,10 @@ export const useGlobalStore = () => {
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
-                let playlist = response.data.playist;
+                let playlist = response.data.playlist;
                 playlist.name = newName;
                 async function updateList(playlist) {
-                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    response = await api.updateListById(playlist._id, playlist);
                     if (response.data.success) {
                         async function getListPairs(playlist) {
                             response = await api.getPlaylistPairs();
@@ -167,6 +167,10 @@ export const useGlobalStore = () => {
             }
         }
         asyncChangeListName(id);
+    }
+
+    store.setIsListNameEditActive = () => {
+        storeReducer({type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE, payload: null});
     }
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
@@ -279,7 +283,7 @@ export const useGlobalStore = () => {
             };
             let newList = store.currentList;
             newList.songs.push(song);
-            let response = await api.updateListByid(store.currentList._id, newList);
+            let response = await api.updateListById(store.currentList._id, newList);
             if (response.data.success){
                 store.setCurrentList(response.data.id);
             }
@@ -312,7 +316,7 @@ export const useGlobalStore = () => {
 
     store.updateCurrentList = function() {
         async function asyncUpdateCurrentList() {
-            const response = await api.updateListByid(store.currentList._id, store.currentList);
+            const response = await api.updateListById(store.currentList._id, store.currentList);
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,

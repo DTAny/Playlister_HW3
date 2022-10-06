@@ -172,6 +172,11 @@ body {
   font-size:18pt;
 }
 
+#list-selector-list {
+  display: flex;
+  flex-direction: column;
+}
+
 input {
   font-size:20pt;
 }
